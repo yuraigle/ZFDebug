@@ -149,12 +149,18 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
               array_walk($params, array($this, '_addQuotes'));
             }
             $paramCount = count($params);
+            
             if ($paramCount) {
-                $queries .= htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $query['sql'], 1));
+                $qry = htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $query['sql'], 1));
             } else {
-                $queries .= htmlspecialchars($query['sql']);
+                $qry .= htmlspecialchars($query['sql']);
             }
-            $queries .= "</td>\n</tr>\n";
+            $cmd = 'echo ' . escapeshellarg((string) $qry) . ' | sqlformat - --keywords=upper -r';
+            exec($cmd, $output, $error);
+            if (!$error) {
+            	$qry = '<pre>' . implode(PHP_EOL, $output) . '</pre>';
+            }
+            $queries .= $qry . "</td>\n</tr>\n";
         }
         $queries .= "</table>\n";
         return $queries;
