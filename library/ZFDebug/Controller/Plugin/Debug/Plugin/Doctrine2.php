@@ -162,7 +162,7 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
             if ($paramCount) {
                 $qry = htmlspecialchars(preg_replace(array_fill(0, $paramCount, '/\?/'), $params, $query['sql'], 1));
             } else {
-                $qry .= htmlspecialchars($query['sql']);
+                $qry = htmlspecialchars($query['sql']);
             }
             if (self::$_sqlParseEnabled) {
             	$qry = self::prettifySql($qry);
