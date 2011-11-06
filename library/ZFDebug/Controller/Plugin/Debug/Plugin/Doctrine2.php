@@ -190,10 +190,13 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
      */
     protected function _addQuotes(&$value, $key)
     {
-    	if (is_string($value)) {
+    	if (is_scalar($value)) {
     		$value = "'" . $value . "'";
     	} else if ($value instanceof DateTime) {
-    		$value->format('c');
+    		// Try to accommodate for Doctrine's use of more advanced data types
+    		$value = "'" . $value->format('c') . "'";
+    	} else {
+    		$value = "Object of type '" . get_class($value) . "'";
     	}
     }
 
