@@ -190,7 +190,11 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
      */
     protected function _addQuotes(&$value, $key)
     {
-        $value = "'" . $value . "'";
+    	if (is_string($value)) {
+    		$value = "'" . $value . "'";
+    	} else if ($value instanceof DateTime) {
+    		$value->format('c');
+    	}
     }
 
 }
