@@ -34,6 +34,15 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
      * @var array
      */
     protected $_em = array();
+    
+    /**
+     * If true, try to use sqlparse to prettify queries
+     * requires sqlparse to be installed on the server.
+     * 
+     * @see http://code.google.com/p/python-sqlparse/
+     * @var bool
+     */
+    static public $_sqlParseEnabled = false;
 
     /**
      * Create ZFDebug_Controller_Plugin_Debug_Plugin_Variables
@@ -155,15 +164,22 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
             } else {
                 $qry .= htmlspecialchars($query['sql']);
             }
-            $cmd = 'echo ' . escapeshellarg((string) $qry) . ' | sqlformat - --keywords=upper -r';
-            exec($cmd, $output, $error);
-            if (!$error) {
-            	$qry = '<pre>' . implode(PHP_EOL, $output) . '</pre>';
+            if (self::$_sqlParseEnabled) {
+            	$qry = self::prettifySql($qry);
             }
             $queries .= $qry . "</td>\n</tr>\n";
         }
         $queries .= "</table>\n";
         return $queries;
+    }
+    
+    static public function prettifySql($qry) {
+    	$cmd = 'echo ' . escapeshellarg((string) $qry) . ' | sqlformat - --keywords=upper -r';
+    	exec($cmd, $output, $error);
+    	if (!$error) {
+    		$qry = '<pre>' . implode(PHP_EOL, $output) . '</pre>';
+    	}
+    	return $qry;
     }
 
     /**
