@@ -74,8 +74,16 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
      */
     public function getTab()
     {
-        if (!$this->_em)
+        if (!is_array($this->_em) || !count($this->_em)) {
             return 'No entitymanagers available';
+        } else {
+            foreach ($this->_em as $em) {
+                if (!$em instanceof \Doctrine\ORM\EntityManager) {
+                    return "the entitymanager you passed is not an instance of \Doctrine\\ORM\\EntityManager";
+                }
+            }
+        }
+
         $adapterInfo = array();
 
         foreach ($this->_em as $em) {
@@ -89,6 +97,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Doctrine2
         }
         $html = implode(' / ', $adapterInfo);
 
+        if (!$html) {
+            return 'Doctrine2 logger not enabled!';
+        }
         return $html;
     }
 
