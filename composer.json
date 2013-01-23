@@ -1,0 +1,15 @@
+{
+    "name": "reneaigle/zfdebug",
+    "description": "Debug for Zend Framework 1 with Doctrine2 plugin",
+    "require": {
+        "digital-canvas/zend-framework": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZFDebug": "library/"
+        }
+    },
+    "include-path": [
+        "library/"
+    ]
+}
