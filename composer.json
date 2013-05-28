@@ -2,7 +2,9 @@
     "name": "reneaigle/zfdebug",
     "description": "Debug for Zend Framework 1 with Doctrine2 plugin",
     "license": "BSD-2-Clause",
+    "keywords": ["zend", "debug", "doctrine"],
     "require": {
+
     },
     "autoload": {
         "psr-0": {
