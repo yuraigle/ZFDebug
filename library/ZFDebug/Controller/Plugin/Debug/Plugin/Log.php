@@ -75,16 +75,16 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log
     public function getPanel()
     {
         $request = Zend_Controller_Front::getInstance()->getRequest();
-        $module  = $request->getModuleName();
+        $module = $request->getModuleName();
         if ('default' !== $module) {
             $module = " ($module module)";
         } else {
             $module = '';
         }
         $controller = $request->getControllerName();
-        $action     = $request->getActionName();
+        $action = $request->getActionName();
 
-        $panel  = "<h4>Event log for {$controller}Controller->{$action}Action() {$module}</h4>";
+        $panel = "<h4>Event log for {$controller}Controller->{$action}Action() {$module}</h4>";
         $panel .= '<table cellpadding="0" cellspacing="0">'.implode('', $this->_writer->getMessages()).'</table>';
         return $panel;
     }
@@ -117,9 +117,9 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log
      */
     public function mark($name, $logFirst = false) {
         if (isset($this->_marks[$name])) {
-            $this->_marks[$name]['time'] = @round((microtime(true)-$_SERVER['REQUEST_TIME'])*1000-$this->_marks[$name]['time']) . 'ms';
+            $this->_marks[$name]['time'] = round((microtime(true)-(int)$_SERVER['REQUEST_TIME'])*1000-(int)$this->_marks[$name]['time']) . 'ms';
             if (function_exists('memory_get_usage')) {
-                $this->_marks[$name]['memory'] = @round((memory_get_usage()-$this->_marks[$name]['memory'])/1024) . 'K';
+                $this->_marks[$name]['memory'] = round((memory_get_usage()-(int)$this->_marks[$name]['memory'])/1024) . 'K';
             } else {
                 $this->_marks[$name]['memory'] = 'N/A';
             }
@@ -138,8 +138,8 @@ class ZFDebug_Controller_Plugin_Debug_Plugin_Log
             }
             if ($logFirst) {
                 $this->_logger->zflog(
-                    array('time'    => @round($this->_marks[$name]['time']) . 'ms',
-                          'memory'  => @round($this->_marks[$name]['memory']/1024) . 'K',
+                    array('time'    => round($this->_marks[$name]['time']) . 'ms',
+                          'memory'  => round($this->_marks[$name]['memory']/1024) . 'K',
                           'message' => $name,
                     )
                 );
